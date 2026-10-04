@@ -4,11 +4,7 @@ b = float(input("b> "))
 summa = a + b
 vicit = a - b
 umnoz = a * b
-
-if b != 0:
-    delenie = a / b
-else:
-    delenie = "error"
+delenie = a / b
 
 print(summa)
 print(vichit)
