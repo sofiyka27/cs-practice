@@ -1,55 +1,54 @@
-
 def parse_record(line: str) -> dict:
     """
-    Разбирает одну строку журнала в словарь.
-    Если строка неверная, вызывает ValueError.
+    Разбирает строку "город;температура;дата" в словарь.
+    Вызывает ValueError, если строка неверная.
     """
-    # Разбиваем строку строго по точке с запятой
     parts = line.split(';')
     
     # Проверка 1: должно быть ровно 3 части
     if len(parts) != 3:
-        raise ValueError("Строка должна содержать ровно 3 поля, разделенных ';'")
+        raise ValueError("Строка должна содержать ровно 3 поля")
     
-    city, temp_str, date = parts
+    # ОЧИЩАЕМ ОТ ПРОБЕЛОВ (это исправляет тест с пробелами вокруг ";")
+    city = parts[0].strip()
+    temp_str = parts[1].strip()
+    date = parts[2].strip()
     
-    # Проверка 2: город не должен быть пустым
-    if not city.strip():
+    # Проверка 2: город не пустой
+    if not city:
         raise ValueError("Название города не может быть пустым")
         
-    # Проверка 3: температура должна быть числом
+    # Проверка 3: температура — число
     try:
         temp = float(temp_str)
     except ValueError:
-        # Если float() не смог преобразовать, вызываем свою ошибку
         raise ValueError(f"Температура '{temp_str}' не является числом")
         
-    # ВАЖНО: Возвращаем словарь с ключом 'temperature', как ожидает система!
     return {
-        'city': city.strip(),
+        'city': city,
         'temperature': temp, 
-        'date': date.strip()
+        'date': date
     }
 
 
 def read_valid(lines: list[str]) -> list[dict]:
     """
-    Принимает список строк, возвращает список только корректных записей (словарей).
-    Пустые строки и строки с ошибками пропускает.
+    Принимает список строк, возвращает список только корректных записей.
+    Пустые строки и строки с ошибками пропускает молча.
     """
     valid_records = []
     
     for line in lines:
-        # Пропускаем пустые строки молча (не считаем их ошибками)
+        # 1. Проверяем, не пустая ли строка (игнорируем пробелы)
         if not line.strip():
             continue
             
+        # 2. Пытаемся распарсить
         try:
-            # Пытаемся разобрать строку
             record = parse_record(line)
             valid_records.append(record)
         except ValueError:
-            # Если parse_record вызвал ошибку, просто пропускаем эту строку
+            # 3. Если ошибка — пропускаем
             pass
             
     return valid_records
@@ -58,16 +57,13 @@ def read_valid(lines: list[str]) -> list[dict]:
 def average_by_city(records: list[dict]) -> dict:
     """
     Считает среднюю температуру для каждого города.
-    Возвращает словарь вида {'Город': средняя_температура}.
     """
     sums = {}
     counts = {}
     
-    # Собираем сумму температур и количество записей для каждого города
     for rec in records:
         city = rec['city']
-        # ИСПОЛЬЗУЕМ КЛЮЧ 'temperature' вместо 'temp'!
-        temp = rec['temperature'] 
+        temp = rec['temperature']
         
         if city not in sums:
             sums[city] = 0.0
@@ -76,7 +72,6 @@ def average_by_city(records: list[dict]) -> dict:
         sums[city] += temp
         counts[city] += 1
         
-    # Вычисляем среднее и округляем до одного знака после запятой
     averages = {}
     for city in sums:
         avg = sums[city] / counts[city]
@@ -87,8 +82,7 @@ def average_by_city(records: list[dict]) -> dict:
 
 def warmest_city(records: list[dict]) -> str:
     """
-    Находит самый теплый город на основе средних температур.
-    При равенстве температур выбирает первый по алфавиту.
+    Находит самый теплый город.
     """
     averages = average_by_city(records)
     
@@ -98,9 +92,6 @@ def warmest_city(records: list[dict]) -> str:
     best_city = ""
     max_temp = -float('inf')
     
-    # Ищем город с максимальной температурой
-    # Сортируем ключи (названия городов), чтобы при равенстве температур
-    # выбрать первый по алфавиту
     for city in sorted(averages.keys()):
         temp = averages[city]
         if temp > max_temp:
