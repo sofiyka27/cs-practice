@@ -1,26 +1,29 @@
 def parse_record(line: str) -> dict:
-
     parts = line.split(';')
     
+    # Проверка 1: должно быть ровно 3 части
     if len(parts) != 3:
-        raise ValueError("Строка должна содержать ровно 3 поля, разделенных ';'")
+        raise ValueError("Строка должна содержать ровно 3 поля")
     
+    # ОЧИЩАЕМ от пробелов по краям!
     city = parts[0].strip()
     temp_str = parts[1].strip()
     date = parts[2].strip()
     
-    if not city.strip():
+    # Проверка 2: город не должен быть пустым
+    if not city:
         raise ValueError("Название города не может быть пустым")
         
+    # Проверка 3: температура должна быть числом
     try:
         temp = float(temp_str)
     except ValueError:
         raise ValueError(f"Температура '{temp_str}' не является числом")
         
     return {
-        'city': city.strip(),
+        'city': city,
         'temperature': temp, 
-        'date': date.strip()
+        'date': date
     }
 
 
@@ -38,6 +41,7 @@ def read_valid(lines: list[str]) -> list[dict]:
             pass
             
     return valid_records
+
 
 
 def average_by_city(records: list[dict]) -> dict:
