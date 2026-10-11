@@ -7,3 +7,12 @@ def parse_record(line: str) -> dict:
         raise ValueError("значение города пустое")
     if not temp_str.strip():
         raise ValueError("значение температуры пустое")
+    try:
+        temp = float(temp_str)
+    except ValueError:
+        raise ValueError(f"ntvgthfnehf {temp_str} не является числом")
+    return {
+        'city': city.strip(),
+        'temp': temp,
+        'date':date.strip()
+            }
