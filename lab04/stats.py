@@ -5,7 +5,9 @@ def parse_record(line: str) -> dict:
     if len(parts) != 3:
         raise ValueError("Строка должна содержать ровно 3 поля, разделенных ';'")
     
-    city, temp_str, date = parts
+    city = parts[0].strip()
+    temp_str = parts[1].strip()
+    date = parts[2].strip()
     
     if not city.strip():
         raise ValueError("Название города не может быть пустым")
