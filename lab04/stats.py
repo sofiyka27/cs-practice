@@ -28,7 +28,10 @@ def read_valid(lines: list[str]) -> list[dict]:
     for line in lines:
         if not line.strip():
             continue
-            
+        
+        if line.count(';') != 2:
+            continue
+        
         try:
             record = parse_record(line)
             valid_records.append(record)
