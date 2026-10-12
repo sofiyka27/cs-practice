@@ -9,7 +9,10 @@ def parse_record(line: str) -> dict:
     
     if not city.strip():
         raise ValueError("Название города не может быть пустым")
-        
+
+    if not date.strip():
+            raise ValueError("Дата не может быть пустой")
+    
     try:
         temp = float(temp_str.strip().replace(',','.'))
     except ValueError:
