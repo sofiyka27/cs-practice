@@ -1,6 +1,6 @@
 def parse_record(line: str) -> dict:
 
-    parts = line.split(';')
+    parts = line.strip().split(';')
     
     if len(parts) != 3:
         raise ValueError("Строка должна содержать ровно 3 поля, разделенных ';'")
