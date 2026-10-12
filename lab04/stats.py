@@ -11,7 +11,7 @@ def parse_record(line: str) -> dict:
         raise ValueError("Название города не может быть пустым")
         
     try:
-        temp = float(temp_str)
+        temp = float(temp_str.strip().replace(',','.'))
     except ValueError:
         raise ValueError(f"Температура '{temp_str}' не является числом")
         
