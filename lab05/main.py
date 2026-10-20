@@ -1,3 +1,5 @@
+import logstats
+
 def main():
     with open(filename, encoding="utf-8") as log_file:
     counts = logstats.count_levels(log_file)
@@ -20,5 +22,5 @@ def main():
 
     with open("report.txt", "w", encoding="utf-8") as report_file:
         report_file.write(report_text)
-if __name__ == "__main__":
+if name == "main":
     main() 
