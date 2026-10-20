@@ -22,5 +22,6 @@ def main():
 
     with open("report.txt", "w", encoding="utf-8") as report_file:
         report_file.write(report_text)
-if name == "main":
+
+if __name__ == "__main__":
     main() 
