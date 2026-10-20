@@ -17,6 +17,16 @@ def parce_event(line: str) -> dict:
         "message": message
     }
 
+def count_levels(lines) -> dict:
+    try:
+        event = parse_event(line)
+        level = event["level"]
+        counts[level] = counts.get(level, 0) + 1
+    except ValueError:
+        counts["BROKEN"] = counts.get("BROKEN", 0) + 1
+        
+return counts 
+
 def top_errors(lines, n: int) -> list[list]:
     try:
         event = parse_event(line)
@@ -36,6 +46,7 @@ def top_errors(lines, n: int) -> list[list]:
 
     return errors_list[:n]
     
+
 
 
     
