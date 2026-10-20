@@ -2,7 +2,7 @@ import logstats
 
 def main():
     with open(filename, encoding="utf-8") as log_file:
-    counts = logstats.count_levels(log_file)
+        counts = logstats.count_levels(log_file)
     
     total_lines = sum(counts.values())
     error_lines = counts.get("ERROR", 0)
