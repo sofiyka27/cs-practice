@@ -17,7 +17,24 @@ def parce_event(line: str) -> dict:
         "message": message
     }
 
+def top_errors(lines, n: int) -> list[list]:
+    try:
+        event = parse_event(line)
+        if event["level"] == "ERROR":
+            msg = event["message"]
+            errors_count[msg] = errors_count.get(msg, 0) + 1
+    except ValueError:
+        
+        continue
+        
 
+    errors_list = [[msg, count] for msg, count in errors_count.items()]
+
+
+    errors_list.sort(key=lambda x: (-x[1], x[0]))
+
+
+    return errors_list[:n]
     
 
 
