@@ -24,21 +24,21 @@ def count_levels(lines) -> dict:
         counts[level] = counts.get(level, 0) + 1
     except ValueError:
         counts["BROKEN"] = counts.get("BROKEN", 0) + 1
-        
+
 return counts 
 
 def top_errors(lines, n: int) -> list[list]:
     try:
         event = parse_event(line)
         if event["level"] == "ERROR":
-            msg = event["message"]
-            errors_count[msg] = errors_count.get(msg, 0) + 1
+            msgg = event["message"]
+            errors_count[msgg] = errors_count.get(msgg, 0) + 1
     except ValueError:
         
         continue
         
 
-    errors_list = [[msg, count] for msg, count in errors_count.items()]
+    errors_list = [[msgg, count] for msgg, count in errors_count.items()]
 
 
     errors_list.sort(key=lambda x: (-x[1], x[0]))
@@ -46,7 +46,16 @@ def top_errors(lines, n: int) -> list[list]:
 
     return errors_list[:n]
     
+def format_report(counts: dict, errors: list[list]) -> str:for level in sorted(counts.keys()):
+    report += f"{level}: {counts[level]}\n"
+    
+    report += "\nЧастые ошибки:\n"
 
+
+    for msgg, count in errors:
+        report += f"- {msgg} — {count}\n"
+    
+    return report
 
 
     
