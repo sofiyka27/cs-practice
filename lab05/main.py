@@ -1,10 +1,21 @@
 import logstats
 
 def main():
-    filename = input().strip()
+    filename = 'events.log'
 
-    with open(filename, encoding="utf-8") as log_file:
-        counts = logstats.count_levels(log_file)
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        if len(lines) == 0:
+            print("ВНИМАНИЕ: Файл пуст!")
+            return
+            
+    except FileNotFoundError:
+        print(f"ОШИБКА: Файл {filename} не найден в папке! Проверьте расширение.")
+        return
+    
+    counts = logstats.count_levels(lines)
+    top_err = logstats.top_errors(lines, 3)
     
     total_lines = sum(counts.values())
     error_lines = counts.get("ERROR", 0)
