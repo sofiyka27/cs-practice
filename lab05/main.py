@@ -1,7 +1,8 @@
 import logstats
+import sys
 
 def main():
-    filename = input().strip()
+    filename = sys.argv[1] if len(sys.argv) > 1 else "events.log"
     with open(filename, encoding="utf-8") as log_file:
         counts = logstats.count_levels(log_file)
     
