@@ -1,6 +1,7 @@
 import logstats
 
 def main():
+    filename = input().strip()
     with open(filename, encoding="utf-8") as log_file:
         counts = logstats.count_levels(log_file)
     
