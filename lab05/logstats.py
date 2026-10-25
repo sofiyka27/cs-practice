@@ -7,6 +7,11 @@ def parse_event(line: str) -> dict:
         raise ValueError("Неверный формат строки")
     
     time_and_date, level, message = parts
+    
+    allowed_levels = {"DEBUG", "INFO", "WARNING", "ERROR"}
+    if level not in allowed_levels:
+        raise ValueError("Неизвестный уровень")
+    
     return {
         "time": time_and_date,
         "level": level,
