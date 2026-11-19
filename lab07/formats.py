@@ -11,7 +11,7 @@ def csv_to_records(text: str) -> list[dict]:
         record = dict(zip(headers,values))
         records.append(record)
         
-        return records 
+    return records 
 
 def parse_settings(lines:list[str]) -> dict:
     result = {}
