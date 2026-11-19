@@ -77,7 +77,9 @@ def merge_by_key(rows: list[dict], extra: dict, key: str = 'id') -> list[dict]:
         row_id = row.get(key)
         
         if row_id in extra:
-            new_row.update(extra[row_id])
+            for k, v in extra[row_id].items():
+                if k not in new_row:
+                    new_row[k] = v
             
         result.append(new_row)
         
