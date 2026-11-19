@@ -2,11 +2,13 @@ def csv_to_records(text: str) -> list[dict]:
     if not text.strip():
         return[]
 
-    lines = text.strip().split('\n')
-    headers = lines[0].split(',')
+    lines = text.strip().splitlines()
+    headers = [h.strip() for h in lines[0].split(',')]
 
     records = []
     for line in lines[1:]:
+        if not line.strip():
+            continue
         values = line.split(',')
         record = dict(zip(headers,values))
         records.append(record)
@@ -18,50 +20,51 @@ def parse_settings(lines:list[str]) -> dict:
     current_key = None
 
     for line in lines:
-        if not line.strip():
-            continue
+        stripped_line = line.strip()
 
-        if line.strip().startswith('-'):
+        if not stripped_line or stripped_line.startswith('#'):
+            continue
+            
+        if stripped_line.startswith('- '):
             if current_key is not None:
                 if not isinstance(result.get(current_key), list):
                     result[current_key] = []
-
-                val = line.strip()[2:].strip()
-
-                if val.lower() in ('true','yes'):
+                
+                val = stripped_line[2:].strip()
+                
+                if val.lower() in ('true', 'yes'):
                     converted_val = True
-                elif val.lower() in ('false','no'):
+                elif val.lower() in ('false', 'no'):
                     converted_val = False
                 else:
                     try:
-                        if '.' in val:
-                            converted_val = float(val)
-                        else: 
-                            converted_val = int(val)
+                        converted_val = float(val) if '.' in val else int(val)
                     except ValueError:
                         converted_val = val
+                        
                 result[current_key].append(converted_val)
-
             continue
         
-        if ':' in line:
-            parts = line.split(':',1)
+        if ':' in stripped_line:
+            parts = stripped_line.split(':',1)
             key = parts[0].strip()
             val = parts[1].strip()
 
+            if '#' in val:
+                    val = val.split('#')[0].strip()
+            
             current_key = key
-
-            if val == "":
-                if val.lower() in ('true','yes'):
-                    converted_val = True
-                elif val.lower() in ('false','no'):
+                
+            if val == '':
+                result[key] = [] 
+            else:
+                if val.lower() in ('true', 'yes'): 
+                    converted_val = True                 
+                elif val.lower() in ('false', 'no'):
                     converted_val = False
                 else:
                     try:
-                        if '.' in val:
-                            converted_val = float(val)
-                        else: 
-                            converted_val = int(val)
+                        converted_val = float(val) if '.' in val else int(val)
                     except ValueError:
                         converted_val = val
                 result[key] = converted_val
@@ -71,7 +74,6 @@ def merge_by_key(rows: list[dict], extra: dict, key: str = 'id') -> list[dict]:
     result = []
     for row in rows:
         new_row = row.copy()
-        
         row_id = row.get(key)
         
         if row_id in extra:
