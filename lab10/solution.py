@@ -22,3 +22,22 @@ def matrix_multiply(left, right):
     right_arr = np.asarray(right)
     return (left_arr @ right_arr).tolist()
 
+def transpose_matrix(matrix):
+    arr = np.asarray(matrix)
+    return arr.T.tolist()
+
+def solve_system(matrix, vector):
+    mat = np.asarray(matrix)
+    vec = np.asarray(vector)
+    solution = np.linalg.solve(mat, vec)
+    return np.round(solution, 6).tolist()
+
+def tensor_channel_mean(tensor):
+    arr = np.asarray(tensor)
+    return arr.mean(axis=-1).tolist()
+
+def point_distance(first, second):
+    pt1 = np.asarray(first)
+    pt2 = np.asarray(second)
+    distance = np.linalg.norm(pt1 - pt2)
+    return float(np.round(distance, 6))
